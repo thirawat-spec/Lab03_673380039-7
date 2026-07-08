@@ -1,3 +1,5 @@
+package com.example;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +28,8 @@ import java.util.List;
 // 👉 TODO A : enum นี้มีแค่ STANDARD
 //             เพิ่ม EXPRESS ให้ครบด้วย
 enum ShipmentType {
-    STANDARD
+    STANDARD,
+    EXPRESS
     // เพิ่ม EXPRESS ตรงนี้
 }
 
@@ -45,8 +48,8 @@ class Shipment {
     //             แก้ให้ถูกต้อง
     public Shipment(String trackingNumber, double weightKg, ShipmentType type) {
         this.trackingNumber = trackingNumber;
-        this.weightKg       = type;       // ← ผิด ควรเป็น weightKg
-        this.type           = weightKg;   // ← ผิด ควรเป็น type
+        this.weightKg       = weightKg;       // ← ผิด ควรเป็น weightKg
+        this.type           = type;   // ← ผิด ควรเป็น type
     }
 
     public String       getTrackingNumber() { return trackingNumber; }
@@ -57,8 +60,8 @@ class Shipment {
     //             แก้ให้ใช้ STANDARD_RATE และ EXPRESS_RATE ที่ถูกต้อง
     //             STANDARD_RATE = 40.0 , EXPRESS_RATE = 100.0
     public double calculateCost() {
-        final double STANDARD_RATE = 1.0;   // ← ผิด ควรเป็น 40.0
-        final double EXPRESS_RATE  = 1.0;   // ← ผิด ควรเป็น 100.0
+        final double STANDARD_RATE = 40.0;   // ← ผิด ควรเป็น 40.0
+        final double EXPRESS_RATE  = 100.0;   // ← ผิด ควรเป็น 100.0
         if (type == ShipmentType.STANDARD) {
             return weightKg * STANDARD_RATE;
         } else {
@@ -72,7 +75,8 @@ class Shipment {
     //             แนะนำ: ใช้ String.format() และเรียก calculateCost()
     @Override
     public String toString() {
-        return "[" + trackingNumber + "] ???";  // ← เติมให้ครบ
+        return String.format("[%s]  %.2f กก. | %-8s | %10.2f บาท",
+            trackingNumber, weightKg, type, calculateCost());  // ← เติมให้ครบ
     }
 }
 
@@ -89,7 +93,7 @@ class ShippingCompany {
     //             เพิ่ม  shipments = new ArrayList<>();  ใน constructor
     public ShippingCompany(String name) {
         this.name = name;
-        // เพิ่มบรรทัด initialize ตรงนี้
+        shipments = new ArrayList<>(); // เพิ่มบรรทัด initialize ตรงนี้
     }
 
     public void addShipment(Shipment s) {
@@ -100,7 +104,12 @@ class ShippingCompany {
     //             ให้รวม calculateCost() ของทุก Shipment ใน list
     public double getTotalCost() {
         double total = 0;
+
         // วนลูปรวม cost ของแต่ละ shipment ตรงนี้
+        for (Shipment s : shipments) {
+            total += s.calculateCost();
+        }
+
         return total;
     }
 
@@ -115,9 +124,14 @@ class ShippingCompany {
         System.out.println("========================================");
 
         // 1) วนลูปแสดงแต่ละ shipment ตรงนี้
+        for (Shipment s : shipments) {
+            System.out.println(s);
+        }
 
         System.out.println("----------------------------------------");
         // 2) แสดงยอดรวมตรงนี้
+        System.out.printf("  ยอดรวมทั้งหมด : %,.2f บาท%n", getTotalCost());
+        System.out.println("========================================");
     }
 }
 
