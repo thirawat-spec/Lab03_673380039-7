@@ -1,3 +1,5 @@
+# นายถิรวัฒน์ อุจินา 673380039-7
+
 #  java-shipment-exercise
 
 แบบฝึกหัด Java OOP — ระบบคำนวณค่าขนส่ง Shipment  
